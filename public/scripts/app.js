@@ -1,41 +1,21 @@
 'use strict';
 
-console.log('App.js is running!');
+console.log('Build it visible is running!');
 
 var app = {
-	title: 'Indecision App',
-	subtitle: 'An app for makign decisions!',
-	options: []
+	title: 'Visibility Toggle',
+	textVisible: false
 };
 
-var onFormSubmit = function onFormSubmit(e) {
-	e.preventDefault();
-
-	var option = e.target.elements.option.value;
-
-	if (option) {
-		app.options.push(option);
-		e.target.elements.option.value = '';
-		renderApp();
-	}
-};
-
-var onRemoveAll = function onRemoveAll() {
-	app.options = [];
-	renderApp();
-};
-
-var onMakeDecision = function onMakeDecision() {
-	var randomNum = Math.floor(Math.random() * app.options.length);
-	var option = app.options[randomNum];
-	alert(option);
+var toggleVisibility = function toggleVisibility() {
+	app.textVisible = !app.textVisible;
+	render();
 };
 
 var appRoot = document.getElementById('app');
+var textElement = document.getElementById('text-info');
 
-var numbers = [55, 101, 1000];
-
-var renderApp = function renderApp() {
+var render = function render() {
 	var template = React.createElement(
 		'div',
 		null,
@@ -44,50 +24,19 @@ var renderApp = function renderApp() {
 			null,
 			app.title
 		),
-		app.subtitle && React.createElement(
-			'p',
-			null,
-			app.subtitle
-		),
-		React.createElement(
-			'p',
-			null,
-			app.options.length > 0 ? 'Here are your options' : 'No options'
-		),
 		React.createElement(
 			'button',
-			{ disabled: app.options.length === 0, onClick: onMakeDecision },
-			'What should I do?'
+			{ onClick: toggleVisibility },
+			app.textVisible ? 'Hide details' : 'Show details'
 		),
-		React.createElement(
-			'button',
-			{ onClick: onRemoveAll },
-			'Remove All'
-		),
-		React.createElement(
-			'ol',
-			null,
-			app.options.map(function (option) {
-				return React.createElement(
-					'li',
-					{ key: option },
-					option
-				);
-			})
-		),
-		React.createElement(
-			'form',
-			{ onSubmit: onFormSubmit },
-			React.createElement('input', { type: 'text', name: 'option' }),
-			React.createElement(
-				'button',
-				null,
-				'Add Option'
-			)
+		app.textVisible && React.createElement(
+			'p',
+			{ id: 'text-info' },
+			'Hey. These are some details you can now see!'
 		)
 	);
 
 	ReactDOM.render(template, appRoot);
 };
 
-renderApp();
+render();
